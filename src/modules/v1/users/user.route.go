@@ -1,13 +1,13 @@
 package users
 
 import (
-	"lectronic/src/libs/middleware"
+	"lectronic/src/middleware"
 
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
 
-func User(route *mux.Router, db *gorm.DB) {
+func New(route *mux.Router, db *gorm.DB) {
 	router := route.PathPrefix("/user").Subrouter()
 
 	repo := NewUserRepo(db)

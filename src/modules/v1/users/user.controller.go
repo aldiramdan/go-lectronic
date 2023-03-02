@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"lectronic/src/databases/orm/models"
 	"lectronic/src/libs"
-	"lectronic/src/libs/middleware"
+	"lectronic/src/middleware"
 	"net/http"
 
 	"github.com/asaskevich/govalidator"
