@@ -2,6 +2,7 @@ package routers
 
 import (
 	"lectronic/src/databases/orm"
+	"lectronic/src/modules/v1/carts"
 	"lectronic/src/modules/v1/products"
 	"net/http"
 
@@ -22,6 +23,7 @@ func RouterApp() (*mux.Router, error) {
 	subRouter.HandleFunc("/", homeHandler).Methods("GET")
 
 	products.New(subRouter, db)
+	carts.New(subRouter, db)
 
 	return mainRoute, nil
 }
