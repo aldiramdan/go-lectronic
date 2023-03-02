@@ -4,6 +4,7 @@ import (
 	"lectronic/src/databases/orm"
 	"lectronic/src/modules/v1/carts"
 	"lectronic/src/modules/v1/products"
+	"lectronic/src/modules/v1/reviews"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -24,6 +25,7 @@ func RouterApp() (*mux.Router, error) {
 
 	products.New(subRouter, db)
 	carts.New(subRouter, db)
+	reviews.New(subRouter, db)
 
 	return mainRoute, nil
 }

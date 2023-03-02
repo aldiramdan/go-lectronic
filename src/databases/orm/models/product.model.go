@@ -9,7 +9,7 @@ type Product struct {
 	Stock       string    `gorm:"type:varchar(255)" json:"stock"`
 	Sold        string    `gorm:"type:varchar(255)" json:"sold"`
 	Category    string    `gorm:"type:varchar(255)" json:"category"`
-	Rating      string    `gorm:"type:varchar(255)" json:"rating"`
+	Rating      float64   `gorm:"type:numeric" json:"rating"`
 	Description string    `gorm:"type:text" json:"description"`
 	CreatedAt   time.Time `gorm:"type:timestamp;default:now()" json:"created_at"`
 	UpdatedAt   time.Time `gorm:"type:timestamp" json:"updated_at"`
