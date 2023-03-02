@@ -1,6 +1,7 @@
 package orm
 
 import (
+	"lectronic/src/databases/orm/models"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -28,12 +29,12 @@ func dbMigrate(cmd *cobra.Command, args []string) error {
 
 	if migDown {
 		log.Println("Migration down done")
-		return db.Migrator().DropTable()
+		return db.Migrator().DropTable(&models.Product{})
 	}
 
 	if migUp {
 		log.Println("Migration up done")
-		return db.AutoMigrate()
+		return db.AutoMigrate(&models.Product{})
 	}
 
 	return nil
