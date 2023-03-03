@@ -1,13 +1,13 @@
 package products
 
 import (
-	"encoding/json"
 	"lectronic/src/databases/orm/models"
 	"lectronic/src/interfaces"
 	"lectronic/src/libs"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
 )
 
 type ProductController struct {
@@ -38,16 +38,19 @@ func (c *ProductController) GetByID(w http.ResponseWriter, r *http.Request) {
 
 func (c *ProductController) Add(w http.ResponseWriter, r *http.Request) {
 
-	var data *models.Product
+	var data models.Product
 
-	err := json.NewDecoder(r.Body).Decode(&data)
+	imageName := r.Context().Value("imageName").(string)
+	data.Image = imageName
+
+	err := schema.NewDecoder().Decode(&data, r.MultipartForm.Value)
 
 	if err != nil {
 		libs.GetResponse(err.Error(), 400, true).Send(w)
 		return
 	}
 
-	c.srvc.Add(data).Send(w)
+	c.srvc.Add(&data).Send(w)
 }
 
 func (c *ProductController) Update(w http.ResponseWriter, r *http.Request) {
@@ -61,16 +64,19 @@ func (c *ProductController) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var data *models.Product
+	var data models.Product
 
-	err := json.NewDecoder(r.Body).Decode(&data)
+	imageName := r.Context().Value("imageName").(string)
+	data.Image = imageName
+
+	err := schema.NewDecoder().Decode(&data, r.MultipartForm.Value)
 
 	if err != nil {
 		libs.GetResponse(err.Error(), 400, true).Send(w)
 		return
 	}
 
-	c.srvc.Update(id, data).Send(w)
+	c.srvc.Update(id, &data).Send(w)
 }
 
 func (c *ProductController) Delete(w http.ResponseWriter, r *http.Request) {
