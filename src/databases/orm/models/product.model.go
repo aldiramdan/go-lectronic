@@ -17,3 +17,7 @@ type Product struct {
 }
 
 type Products []Product
+
+func (Product) TableName() string {
+	return "products"
+}

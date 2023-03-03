@@ -13,3 +13,7 @@ type Review struct {
 }
 
 type Reviews []Review
+
+func (Review) TableName() string {
+	return "reviews"
+}

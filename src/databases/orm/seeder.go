@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"log"
 
+	"lectronic/src/databases/orm/models"
+	seeder "lectronic/src/databases/orm/seeders"
+
 	"github.com/spf13/cobra"
 	"gorm.io/gorm"
 )
@@ -51,7 +54,9 @@ func seedUp(db *gorm.DB) error {
 
 	var seedModel = []seederData{
 		{
-
+			name:  "user",
+			model: seeder.UserSeed,
+			size:  cap(seeder.UserSeed),
 		},
 	}
 
@@ -69,7 +74,8 @@ func seedDown(db *gorm.DB) error {
 
 	var seedModel = []seederData{
 		{
-			
+			name:  models.User{}.TableName(),
+			model: models.User{},
 		},
 	}
 
