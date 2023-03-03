@@ -3,6 +3,7 @@ package users
 import (
 	"lectronic/src/databases/orm/models"
 	"lectronic/src/libs"
+	"os"
 
 	"gorm.io/gorm"
 )
@@ -40,12 +41,32 @@ func (s *user_service) Register(userReg *models.User) *libs.Response {
 
 	userReg.Password = hashPass
 
+	tokenVerify, err := libs.CodeCrypt(32)
+	if err != nil {
+		return libs.GetResponse(err.Error(), 500, true)
+	}
+
+	userReg.TokenVerify = tokenVerify
+
+	emailData := libs.EmailData{
+		URL: os.Getenv("BASE_URL") + "/auth/confirm_email/" + tokenVerify,
+		Username: userReg.Username,
+		Subject: "Your verification code",
+	}
+
+	err = libs.SendEmail(userReg, &emailData)
+	if err != nil {
+		return libs.GetResponse(err.Error(), 500, true)
+	}
+
 	data, err := s.repo.Register(userReg)
 	if err != nil {
 		return libs.GetResponse(err.Error(), 400, true)
 	}
 
-	return libs.GetResponse(data, 200, false)
+	result, _ := s.repo.GetByID(data.UserID)
+
+	return libs.GetResponse(result, 200, false)
 }
 
 func (s *user_service) UpdateUser(userData *models.User, ID string) *libs.Response {
