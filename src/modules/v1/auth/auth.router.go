@@ -9,11 +9,15 @@ import (
 
 func New(route *mux.Router, db *gorm.DB) {
 
-	router := route.PathPrefix("/user/auth").Subrouter()
+	router := route.PathPrefix("/auth").Subrouter()
 
 	repo := users.NewUserRepo(db)
 	service := NewAuthService(repo)
 	ctrl := NewAuthCTRL(*service)
 
 	router.HandleFunc("", ctrl.Login).Methods("POST")
+	
+	router.HandleFunc("/confirm_email/{token}", ctrl.VerifyEmail).Methods("GET")
+
+	router.HandleFunc("/resend_email", ctrl.ResendEmail).Methods("POST")
 }

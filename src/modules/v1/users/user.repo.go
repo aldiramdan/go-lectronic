@@ -43,6 +43,18 @@ func (r *User_repo) UpdateUser(userData *models.User, ID string) (*models.User, 
 	return userData, nil
 }
 
+func (r User_repo) UpdateToken(id, token string) error {
+	
+	var data models.User
+
+	err := r.db.Model(data).Where("user_id = ?", id).Update("token_verify", token).Error
+	if err != nil {
+		return errors.New("update failed")
+	}
+
+	return nil
+}
+
 func (r *User_repo) DeleteUser(ID string) error {
 	
 	var data models.User
@@ -101,6 +113,8 @@ func (r *User_repo) GetByID(ID string) (*models.User, error) {
 		return nil, errors.New("get data failed")
 	}
 
+	data.Role = ""
+
 	return &data, nil
 }
 
@@ -114,4 +128,25 @@ func (r *User_repo) GetEmail(email string) (*models.User, error) {
 	}
 
 	return &data, nil
+}
+
+func (r *User_repo) GetByToken(token string) (*models.User, error) {
+	
+	var data models.User
+
+	err := r.db.First(&data, "token_verify = ?", token).Error
+	if err != nil {
+		return nil, errors.New("get data failed")
+	}
+
+	return &data, nil
+}
+
+func (r *User_repo) TokenExists(token string) bool {
+	
+	var data models.User
+
+	err := r.db.First(&data, "token_verify = ?", token).Error
+
+	return err == nil
 }
