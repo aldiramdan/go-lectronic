@@ -28,8 +28,8 @@ func RouterApp() (*mux.Router, error) {
 	products.New(subRouter, db)
 	carts.New(subRouter, db)
 	reviews.New(subRouter, db)
-	users.New(mainRoute, db)
-	auth.New(mainRoute, db)
+	users.New(subRouter, db)
+	auth.New(subRouter, db)
 
 
 	return mainRoute, nil

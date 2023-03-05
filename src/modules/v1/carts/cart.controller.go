@@ -45,6 +45,8 @@ func (c *CartController) GetByUserID(w http.ResponseWriter, r *http.Request) {
 
 func (c *CartController) Add(w http.ResponseWriter, r *http.Request) {
 
+	user_id := r.Context().Value("user")
+
 	var data *models.Cart
 
 	err := json.NewDecoder(r.Body).Decode(&data)
@@ -53,6 +55,8 @@ func (c *CartController) Add(w http.ResponseWriter, r *http.Request) {
 		libs.GetResponse(err.Error(), 400, true).Send(w)
 		return
 	}
+
+	data.UserID = user_id.(string)
 
 	c.srvc.Add(data).Send(w)
 }

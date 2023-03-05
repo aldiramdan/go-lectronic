@@ -16,7 +16,7 @@ func New(r *mux.Router, db *gorm.DB) {
 
 	route.HandleFunc("/", controller.GetAll).Methods("GET")
 	route.HandleFunc("/{id}", controller.GetByID).Methods("GET")
-	route.HandleFunc("/", middleware.Handler(controller.Add, middleware.AuthCloudUploadFile())).Methods("POST")
-	route.HandleFunc("/{id}", middleware.Handler(controller.Update, middleware.AuthCloudUploadFile())).Methods("PUT")
-	route.HandleFunc("/{id}", controller.Delete).Methods("DELETE")
+	route.HandleFunc("/", middleware.Handler(controller.Add, middleware.AuthCloudUploadFile(), middleware.AuthMiddle("admin"))).Methods("POST")
+	route.HandleFunc("/{id}", middleware.Handler(controller.Update, middleware.AuthCloudUploadFile(), middleware.AuthMiddle("admin"))).Methods("PUT")
+	route.HandleFunc("/{id}", middleware.Handler(controller.Delete, middleware.AuthMiddle("admin"))).Methods("DELETE")
 }

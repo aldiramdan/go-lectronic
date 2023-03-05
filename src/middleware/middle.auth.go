@@ -3,7 +3,6 @@ package middleware
 import (
 	"context"
 	"lectronic/src/libs"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -19,7 +18,7 @@ func AuthMiddle(role ...string) Middleware {
 
 			var header string
 			var valid bool
-			
+
 			if header = r.Header.Get("Authorization"); header == "" {
 				libs.GetResponse("You need to login first", 401, true).Send(w)
 				return
@@ -49,9 +48,7 @@ func AuthMiddle(role ...string) Middleware {
 				return
 			}
 
-			log.Println("Auth middleware passed")
-
-			ctx := context.WithValue(r.Context(), UserID("user"), checkToken.UserID)
+			ctx := context.WithValue(r.Context(), "user", checkToken.UserID)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})

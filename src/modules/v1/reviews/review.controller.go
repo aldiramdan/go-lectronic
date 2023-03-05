@@ -48,6 +48,8 @@ func (c *ReviewController) GetByProductID(w http.ResponseWriter, r *http.Request
 
 func (c *ReviewController) Add(w http.ResponseWriter, r *http.Request) {
 
+	user_id := r.Context().Value("user")
+
 	var data *models.Review
 
 	err := json.NewDecoder(r.Body).Decode(&data)
@@ -56,6 +58,8 @@ func (c *ReviewController) Add(w http.ResponseWriter, r *http.Request) {
 		libs.GetResponse(err.Error(), 400, true).Send(w)
 		return
 	}
+
+	data.UserID = user_id.(string)
 
 	c.srvc.Add(data).Send(w)
 }
