@@ -16,8 +16,32 @@ func NewUserService(repo User_repo) *user_service {
 	return &user_service{repo}
 }
 
+func (s *user_service) GetAllUsers() *libs.Response {
+
+	data, err := s.repo.GetAllUsers()
+	if err != nil {
+		return libs.GetResponse(err.Error(), 500, true)
+	}
+
+	return libs.GetResponse(data, 200, false)
+}
+
+func (s *user_service) GetByID(ID string) *libs.Response {
+
+	data, err := s.repo.GetByID(ID)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return libs.GetResponse(err.Error(), 404, true)
+		} else {
+			return libs.GetResponse(err.Error(), 500, true)
+		}
+	}
+
+	return libs.GetResponse(data, 200, false)
+}
+
 func (s *user_service) Register(userReg *models.User) *libs.Response {
-	
+
 	emailExists, err := s.repo.EmailExists(userReg.Email)
 	if err != nil {
 		return libs.GetResponse(err.Error(), 400, true)
@@ -49,9 +73,9 @@ func (s *user_service) Register(userReg *models.User) *libs.Response {
 	userReg.TokenVerify = tokenVerify
 
 	emailData := libs.EmailData{
-		URL: os.Getenv("BASE_URL") + "/auth/confirm_email/" + tokenVerify,
+		URL:      os.Getenv("BASE_URL") + "/auth/confirm_email/" + tokenVerify,
 		Username: userReg.Username,
-		Subject: "Your verification code",
+		Subject:  "Your verification code",
 	}
 
 	err = libs.SendEmail(userReg, &emailData)
@@ -70,7 +94,7 @@ func (s *user_service) Register(userReg *models.User) *libs.Response {
 }
 
 func (s *user_service) UpdateUser(userData *models.User, ID string) *libs.Response {
-	
+
 	var user models.User
 
 	err := s.repo.db.Where("user_id = ?", ID).First(&user).Error
@@ -106,7 +130,7 @@ func (s *user_service) UpdateUser(userData *models.User, ID string) *libs.Respon
 	if userNameExists {
 		return libs.GetResponse("Username already used", 400, true)
 	}
-	
+
 	if userData.Username == "" {
 		userData.Username = user.Username
 	}
@@ -153,28 +177,4 @@ func (s *user_service) DeleteUser(ID string) *libs.Response {
 	result := map[string]string{"Message": "User has been deleted"}
 
 	return libs.GetResponse(result, 200, false)
-}
-
-func (s *user_service) GetAllUsers() *libs.Response {
-	
-	data, err := s.repo.GetAllUsers()
-	if err != nil {
-		return libs.GetResponse(err.Error(), 500, true)
-	}
-
-	return libs.GetResponse(data, 200, false)
-}
-
-func (s *user_service) GetByID(ID string) *libs.Response {
-
-	data, err := s.repo.GetByID(ID)
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return libs.GetResponse(err.Error(), 404, true)
-		} else {
-			return libs.GetResponse(err.Error(), 500, true)
-		}
-	}
-
-	return libs.GetResponse(data, 200, false) 
 }

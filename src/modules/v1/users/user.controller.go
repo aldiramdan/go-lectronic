@@ -18,6 +18,22 @@ func NewUserCTRL(svc *user_service) *user_ctrl {
 	return &user_ctrl{svc}
 }
 
+func (c *user_ctrl) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-type", "application/json")
+
+	c.svc.GetAllUsers().Send(w)
+}
+
+func (c *user_ctrl) GetByID(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Content-type", "application/json")
+
+	user_id := r.Context().Value("user")
+
+	c.svc.GetByID(user_id.(string)).Send(w)
+}
+
 func (c *user_ctrl) Register(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-type", "application/json")
@@ -40,7 +56,7 @@ func (c *user_ctrl) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	
+
 	w.Header().Set("Content-type", "application/json")
 
 	userID, ok := r.Context().Value(middleware.UserID("user")).(string)
@@ -61,26 +77,10 @@ func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *user_ctrl) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	
+
 	w.Header().Set("Content-type", "application/json")
 
 	id := r.Context().Value(middleware.UserID("user")).(string)
 
 	c.svc.DeleteUser(id).Send(w)
-}
-
-func (c *user_ctrl) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	
-	w.Header().Set("Content-type", "application/json")
-
-	c.svc.GetAllUsers().Send(w)
-}
-
-func (c *user_ctrl) GetByID(w http.ResponseWriter, r *http.Request) {
-
-	w.Header().Set("Content-type", "application/json")
-
-	id := r.Context().Value(middleware.UserID("user")).(string)
-
-	c.svc.GetByID(id).Send(w)
 }
