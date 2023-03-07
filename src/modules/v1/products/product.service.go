@@ -41,6 +41,17 @@ func (s *ProductService) GetByID(id string) *libs.Response {
 	return libs.GetResponse(result, 200, false)
 }
 
+func (s *ProductService) Search(query string) *libs.Response {
+
+	result, err := s.repo.Search(query)
+
+	if err != nil {
+		return libs.GetResponse(err.Error(), 500, true)
+	}
+
+	return libs.GetResponse(result, 200, false)
+}
+
 func (s *ProductService) Add(product *models.Product) *libs.Response {
 	result, err := s.repo.Add(product)
 

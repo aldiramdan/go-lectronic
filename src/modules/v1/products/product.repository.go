@@ -42,6 +42,24 @@ func (r *ProductRepo) GetByID(id string) (*models.Product, error) {
 	return &product, nil
 }
 
+func (r *ProductRepo) Search(query string) (*models.Products, error) {
+
+	var products models.Products
+
+	if err := r.db.
+		Order("created_at DESC").
+		Where("LOWER(name) LIKE ? OR LOWER(category) LIKE ?", "%"+query+"%", "%"+query+"%").
+		Find(&products).Error; err != nil {
+		return nil, err
+	}
+
+	if len(products) == 0 {
+		return nil, errors.New("search data product not found")
+	}
+
+	return &products, nil
+}
+
 func (r *ProductRepo) Add(product *models.Product) (*models.Product, error) {
 	if err := r.db.
 		Create(product).
