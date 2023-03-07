@@ -9,13 +9,14 @@ type User struct {
 	Username     string    `json:"username,omitempty" valid:"type(string),required~Username is needed"`
 	Email        string    `json:"email" valid:"email,required~Email is needed"`
 	Password     string    `json:"password,omitempty" valid:"length(8|32), required~Password cannot be empty"`
+	Name         string    `json:"name,omitempty" valid:"-"`
 	Gender       string    `json:"gender,omitempty" valid:"-"`
 	Address      string    `json:"address,omitempty" valid:"-"`
 	DateOfBirth  string    `json:"date_of_birth,omitempty" valid:"-"`
 	Role         string    `gorm:"default:user" json:"role,omitempty" valid:"-"`
 	Image        string    `json:"image,omitempty" valid:"-"`
 	MobileNumber string    `json:"mobile_number,omitempty" valid:"-"`
-	TokenVerify  string    `json:"token_verify" valid:"-"`
+	TokenVerify  string    `json:"token_verify,omitempty" valid:"-"`
 	IsActive     bool      `gorm:"default: false" json:"is_active,omitempty" valid:"-"`
 	CreatedAt    time.Time `json:"created_at"  valid:"-"`
 	UpdatedAt    time.Time `json:"updated_at" valid:"-"`

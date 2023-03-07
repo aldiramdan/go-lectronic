@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"lectronic/src/databases/orm/models"
 	"lectronic/src/libs"
-	"lectronic/src/middleware"
 	"net/http"
 
 	"github.com/asaskevich/govalidator"
@@ -59,11 +58,7 @@ func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-type", "application/json")
 
-	userID, ok := r.Context().Value(middleware.UserID("user")).(string)
-	if !ok {
-		libs.GetResponse("Unauthorized", 401, true).Send(w)
-		return
-	}
+	user_id := r.Context().Value("user")
 
 	var user models.User
 
@@ -73,14 +68,14 @@ func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c.svc.UpdateUser(&user, string(userID)).Send(w)
+	c.svc.UpdateUser(&user, user_id.(string)).Send(w)
 }
 
 func (c *user_ctrl) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-type", "application/json")
 
-	id := r.Context().Value(middleware.UserID("user")).(string)
+	user_id := r.Context().Value("user")
 
-	c.svc.DeleteUser(id).Send(w)
+	c.svc.DeleteUser(user_id.(string)).Send(w)
 }

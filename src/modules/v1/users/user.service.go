@@ -115,22 +115,6 @@ func (s *user_service) UpdateUser(userData *models.User, ID string) *libs.Respon
 		userData.Password = hashPass
 	}
 
-	emailExists, err := s.repo.EmailExists(userData.Email)
-	if err != nil {
-		return libs.GetResponse(err.Error(), 400, true)
-	}
-	if emailExists {
-		return libs.GetResponse("Email already exists", 400, true)
-	}
-
-	userNameExists, err := s.repo.UsernameExists(userData.Username)
-	if err != nil {
-		return libs.GetResponse(err.Error(), 400, true)
-	}
-	if userNameExists {
-		return libs.GetResponse("Username already used", 400, true)
-	}
-
 	if userData.Username == "" {
 		userData.Username = user.Username
 	}

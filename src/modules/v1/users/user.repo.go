@@ -19,7 +19,7 @@ func (r *User_repo) GetAllUsers() (*models.Users, error) {
 
 	var user models.Users
 
-	result := r.db.Select("user_id, username, email, gender, image, mobile_number").Where("role = ?", "user").Order("created_at DESC").Find(&user).Error
+	result := r.db.Select("user_id, username, email, name, gender, address, date_of_birth, image, mobile_number").Where("role = ?", "user").Order("created_at DESC").Find(&user).Error
 	if result != nil {
 		return nil, errors.New("get data failed")
 	}
@@ -32,7 +32,7 @@ func (r *User_repo) GetByID(ID string) (*models.User, error) {
 
 	var data models.User
 
-	result := r.db.Select("user_id, username, email, gender, role, image, mobile_number, created_at, updated_at").Find(&data, "user_id = ?", ID).Error
+	result := r.db.Select("user_id, username, email, name, gender,  address, date_of_birth, role, image, mobile_number, created_at, updated_at").Find(&data, "user_id = ?", ID).Error
 	if result != nil {
 		return nil, errors.New("get data failed")
 	}
