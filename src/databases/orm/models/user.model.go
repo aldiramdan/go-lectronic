@@ -12,10 +12,10 @@ type User struct {
 	Name         string    `json:"name,omitempty" valid:"-"`
 	Gender       string    `json:"gender,omitempty" valid:"-"`
 	Address      string    `json:"address,omitempty" valid:"-"`
-	DateOfBirth  string    `json:"date_of_birth,omitempty" valid:"-"`
+	DateOfBirth  string    `json:"date_of_birth,omitempty" schema:"date_of_birth" valid:"-"`
 	Role         string    `gorm:"default:user" json:"role,omitempty" valid:"-"`
 	Image        string    `json:"image,omitempty" valid:"-"`
-	MobileNumber string    `json:"mobile_number,omitempty" valid:"-"`
+	MobileNumber string    `json:"mobile_number,omitempty" schema:"mobile_number" valid:"-"`
 	TokenVerify  string    `json:"token_verify,omitempty" valid:"-"`
 	IsActive     bool      `gorm:"default: false" json:"is_active,omitempty" valid:"-"`
 	CreatedAt    time.Time `json:"created_at"  valid:"-"`

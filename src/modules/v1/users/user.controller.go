@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"lectronic/src/databases/orm/models"
 	"lectronic/src/libs"
-	"log"
 	"net/http"
 
 	"github.com/asaskevich/govalidator"
@@ -69,7 +68,6 @@ func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	err := schema.NewDecoder().Decode(&user, r.MultipartForm.Value)
 	if err != nil {
-		log.Printf("%v", err)
 		libs.GetResponse(err.Error(), 400, true).Send(w)
 		return
 	}
