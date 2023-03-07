@@ -42,6 +42,21 @@ func (r *ProductRepo) GetByID(id string) (*models.Product, error) {
 	return &product, nil
 }
 
+func (r *ProductRepo) Popular() (*models.Products, error) {
+
+	var products models.Products
+
+	if err := r.db.
+		Order("rating DESC, sold DESC").
+		Limit(5).
+		Find(&products).Error; err != nil {
+		return nil, err
+	}
+
+	return &products, nil
+
+}
+
 func (r *ProductRepo) Search(query string) (*models.Products, error) {
 
 	var products models.Products

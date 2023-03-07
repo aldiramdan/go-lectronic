@@ -36,6 +36,11 @@ func (c *ProductController) GetByID(w http.ResponseWriter, r *http.Request) {
 	c.srvc.GetByID(id).Send(w)
 }
 
+func (c *ProductController) Popular(w http.ResponseWriter, r *http.Request) {
+
+	c.srvc.Popular().Send(w)
+}
+
 func (c *ProductController) Search(w http.ResponseWriter, r *http.Request) {
 
 	vars := r.URL.Query()
