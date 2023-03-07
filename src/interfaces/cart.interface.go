@@ -8,7 +8,7 @@ import (
 type CartRepo interface {
 	GetAll() (*models.Carts, error)
 	GetByID(id string) (*models.Cart, error)
-	GetByUserID(id string) (*models.Cart, error)
+	GetByUserID(id string) (*models.Carts, error)
 	Add(cart *models.Cart) (*models.Cart, error)
 	Update(id string, cart *models.Cart) (*models.Cart, error)
 	Delete(id string) (*models.Cart, error)
