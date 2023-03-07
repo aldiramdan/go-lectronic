@@ -37,8 +37,6 @@ func (r *User_repo) GetByID(ID string) (*models.User, error) {
 		return nil, errors.New("get data failed")
 	}
 
-	data.Role = ""
-
 	return &data, nil
 }
 
