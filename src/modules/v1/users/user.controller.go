@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"lectronic/src/databases/orm/models"
 	"lectronic/src/libs"
+	"log"
 	"net/http"
 
 	"github.com/asaskevich/govalidator"
+	"github.com/gorilla/schema"
 )
 
 type user_ctrl struct {
@@ -58,17 +60,21 @@ func (c *user_ctrl) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-type", "application/json")
 
-	user_id := r.Context().Value("user")
+	user_id := r.Context().Value("user").(string)
 
 	var user models.User
 
-	err := json.NewDecoder(r.Body).Decode(&user)
+	imageName := r.Context().Value("imageName").(string)
+	user.Image = imageName
+
+	err := schema.NewDecoder().Decode(&user, r.MultipartForm.Value)
 	if err != nil {
+		log.Printf("%v", err)
 		libs.GetResponse(err.Error(), 400, true).Send(w)
 		return
 	}
 
-	c.svc.UpdateUser(&user, user_id.(string)).Send(w)
+	c.svc.UpdateUser(&user, user_id).Send(w)
 }
 
 func (c *user_ctrl) DeleteUser(w http.ResponseWriter, r *http.Request) {
