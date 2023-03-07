@@ -36,6 +36,24 @@ func (c *ProductController) GetByID(w http.ResponseWriter, r *http.Request) {
 	c.srvc.GetByID(id).Send(w)
 }
 
+func (c *ProductController) Popular(w http.ResponseWriter, r *http.Request) {
+
+	c.srvc.Popular().Send(w)
+}
+
+func (c *ProductController) Search(w http.ResponseWriter, r *http.Request) {
+
+	vars := r.URL.Query()
+
+	query, ok := vars["s"]
+	if !ok {
+		libs.GetResponse("Missing query parameter", 400, true).Send(w)
+		return
+	}
+
+	c.srvc.Search(query[0]).Send(w)
+}
+
 func (c *ProductController) Add(w http.ResponseWriter, r *http.Request) {
 
 	var data models.Product
