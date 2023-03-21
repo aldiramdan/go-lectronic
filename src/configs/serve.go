@@ -44,7 +44,7 @@ func serve(cmd *cobra.Command, args []string) error {
 
 	var address string = "0.0.0.0:8080"
 	if PORT := os.Getenv("PORT"); PORT != "" {
-		address = "127.0.0.1:" + PORT
+		address = "0.0.0.0:" + PORT
 	}
 
 	crs := corsHandler()
@@ -57,7 +57,7 @@ func serve(cmd *cobra.Command, args []string) error {
 		Handler:      crs.Handler(mainRoute),
 	}
 
-	log.Println("app run on port 8080")
+	log.Println("app run on port", address)
 
 	return srv.ListenAndServe()
 }
