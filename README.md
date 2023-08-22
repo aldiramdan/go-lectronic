@@ -10,7 +10,7 @@
 1. Clone the repository
 
 ```bash
-git clone https://github.com/aldiramdan/go-rentvehicle.git
+git clone https://github.com/aldiramdan/go-lectronic.git
 ```
 
 2. Install dependencies
